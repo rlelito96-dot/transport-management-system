@@ -16,8 +16,17 @@ addopts = "--cov=app --cov-report=term-missing --cov-fail-under=80"
 
 [tool.coverage.run]
 branch = true
-source = ["src"]
+source = ["app"]
 
 [tool.coverage.report]
 omit = ["tests/*"]
 show_missing = true
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.0.3",
+    "pytest-cov==7.1.0",
+    "coverage==7.13.5",
+    "ruff==0.15.11",
+    "python-dotenv==1.2.2"
+]
