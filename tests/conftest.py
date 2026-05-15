@@ -1,6 +1,9 @@
 import pytest
+from fastapi.testclient import TestClient
 
+from app.api.dependencies.db import get_db
 from app.infrastructure.db.session import SessionLocal, engine
+from app.main import app
 
 
 @pytest.fixture()
@@ -16,3 +19,12 @@ def db():
         session.close()
         transaction.rollback()
         connection.close()
+
+
+@pytest.fixture()
+def client(db):
+    app.dependency_overrides[get_db] = lambda: db
+
+    yield TestClient(app)
+
+    app.dependency_overrides.clear()
