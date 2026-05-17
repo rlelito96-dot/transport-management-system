@@ -13,3 +13,8 @@ class UserResponseDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserLoginDTO(BaseModel):
+    email: EmailStr
+    password: str
