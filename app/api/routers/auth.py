@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.api.dependencies.auth import get_current_user
 from app.api.dependencies.db import get_db
 from app.application.dto.user_dto import (
     UserCreateDTO,
@@ -57,3 +58,8 @@ def login_user(
             status_code=401,
             detail=str(error),
         ) from error
+
+
+@router.get("/me", response_model=UserResponseDTO)
+def get_me(current_user=Depends(get_current_user)):
+    return current_user
