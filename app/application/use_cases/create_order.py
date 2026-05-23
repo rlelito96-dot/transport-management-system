@@ -1,5 +1,5 @@
 from app.application.dto.order_dto import (
-    OrderCreateDTO,
+    OrderDTO,
 )
 from app.infrastructure.repositories.order_repo import (
     OrderRepository,
@@ -12,7 +12,7 @@ class CreateOrderUseCase:
 
     def execute(
         self,
-        dto: OrderCreateDTO,
+        dto: OrderDTO,
         created_by: int,
     ):
         return self.order_repo.create(
