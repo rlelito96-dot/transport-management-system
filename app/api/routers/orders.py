@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.api.dependencies.auth import get_current_user
@@ -20,6 +20,7 @@ router = APIRouter(prefix="/orders", tags=["orders"])
 @router.post(
     "",
     response_model=OrderResponseDTO,
+    status_code=status.HTTP_201_CREATED,
 )
 def create_order(
     dto: OrderDTO,
