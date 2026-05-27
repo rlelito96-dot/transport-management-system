@@ -28,3 +28,18 @@ def client(db):
     yield TestClient(app)
 
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def auth_token(client):
+    client.post(
+        "/auth/register", json={"email": "test@test.com", "password": "password123"}
+    )
+
+    login_response = client.post(
+        "/auth/login", json={"email": "test@test.com", "password": "password123"}
+    )
+
+    token = login_response.json()["access_token"]
+
+    return token
