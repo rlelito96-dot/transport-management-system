@@ -1,10 +1,13 @@
+from app.domain.enums.roles import Role
 from app.infrastructure.repositories.user_repo import UserRepository
 
 
 def test_create_user(db):
     repo = UserRepository(db)
 
-    user = repo.create(email="test@test.com", hashed_password="hashed", role="CLIENT")
+    user = repo.create(
+        email="test@test.com", hashed_password="hashed", role=Role.CLIENT
+    )
 
     assert user.id is not None
     assert user.email == "test@test.com"

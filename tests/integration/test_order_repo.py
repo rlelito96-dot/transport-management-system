@@ -1,3 +1,4 @@
+from app.domain.enums.roles import Role
 from app.domain.models.company import Company
 from app.domain.models.order import Order
 from app.domain.models.user import User
@@ -17,7 +18,7 @@ def test_create_order(db):
     user = User(
         email="test@test.com",
         hashed_password="x",
-        role="CLIENT",
+        role=Role.CLIENT,
     )
 
     db.add_all([company, user])
