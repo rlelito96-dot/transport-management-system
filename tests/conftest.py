@@ -1,8 +1,11 @@
+from uuid import uuid4
+
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy.orm import sessionmaker
 
 from app.api.dependencies.db import get_db
-from app.infrastructure.db.session import SessionLocal, engine
+from app.infrastructure.db.session import engine
 from app.main import app
 
 
@@ -11,7 +14,13 @@ def db():
     connection = engine.connect()
     transaction = connection.begin()
 
-    session = SessionLocal(bind=connection)
+    Session = sessionmaker(
+        autocommit=False,
+        autoflush=False,
+        bind=connection,
+    )
+
+    session = Session()
 
     try:
         yield session
@@ -32,12 +41,13 @@ def client(db):
 
 @pytest.fixture
 def auth_token(client):
-    client.post(
-        "/auth/register", json={"email": "test@test.com", "password": "password123"}
-    )
+    email = f"test-{uuid4()}@test.com"
+    password = "password123"
+
+    client.post("/auth/register", json={"email": email, "password": password})
 
     login_response = client.post(
-        "/auth/login", json={"email": "test@test.com", "password": "password123"}
+        "/auth/login", json={"email": email, "password": password}
     )
 
     token = login_response.json()["access_token"]
