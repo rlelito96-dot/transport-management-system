@@ -22,7 +22,7 @@ def test_create_order(db):
     )
 
     db.add_all([company, user])
-    db.commit()
+    db.flush()
     db.refresh(company)
     db.refresh(user)
 
