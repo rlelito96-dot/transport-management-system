@@ -7,11 +7,19 @@ from app.application.dto.order_dto import (
     OrderDTO,
     OrderResponseDTO,
 )
+from app.application.use_cases.assign_order import AssignOrderUseCase
 from app.application.use_cases.create_order import (
     CreateOrderUseCase,
 )
+from app.domain.services.assignment_service import AssignmentService
+from app.infrastructure.repositories.driver_repo import (
+    DriverRepository,
+)
 from app.infrastructure.repositories.order_repo import (
     OrderRepository,
+)
+from app.infrastructure.repositories.vehicle_repo import (
+    VehicleRepository,
 )
 
 router = APIRouter(prefix="/orders", tags=["orders"])
@@ -35,3 +43,21 @@ def create_order(
         dto=dto,
         created_by=current_user.id,
     )
+
+
+@router.post("/{order_id}/assign")
+def assign_order(
+    order_id: int,
+    driver_id: int,
+    vehicle_id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    use_case = AssignOrderUseCase(
+        OrderRepository(db),
+        DriverRepository(db),
+        VehicleRepository(db),
+        AssignmentService(),
+    )
+
+    return use_case.execute(order_id, driver_id, vehicle_id)
