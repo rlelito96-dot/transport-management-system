@@ -5,7 +5,7 @@ def test_create_order(client, auth_token, db):
     company = Company(name="test", address="Warsaw")
 
     db.add(company)
-    db.commit()
+    db.flush()
     db.refresh(company)
 
     response = client.post(
