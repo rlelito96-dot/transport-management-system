@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+from app.domain.enums.roles import Role
 from app.domain.models.user import User
 
 
@@ -7,7 +8,7 @@ class UserRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def create(self, email: str, hashed_password: str, role: str = "CLIENT"):
+    def create(self, email: str, hashed_password: str, role: Role = Role.CLIENT):
         user = User(
             email=email,
             hashed_password=hashed_password,
