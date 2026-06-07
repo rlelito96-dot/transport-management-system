@@ -89,3 +89,98 @@ def test_assign_order(
     assert data["delivery_address"] == "Berlin"
     assert data["cargo_description"] == "X"
     assert data["company_id"] == company.id
+
+
+def test_start_delivery(
+    client,
+    auth_token,
+    db,
+):
+    company = Company(
+        name="test",
+        address="Warsaw",
+    )
+
+    db.add(company)
+    db.flush()
+    db.refresh(company)
+
+    user = User(email="test@test.com", hashed_password="hash", role=Role.CLIENT)
+
+    db.add(user)
+    db.flush()
+    db.refresh(user)
+
+    order = Order(
+        pickup_address="Warsaw",
+        delivery_address="Berlin",
+        cargo_description="Electronics",
+        company_id=company.id,
+        status=OrderStatus.ASSIGNED,
+        created_by=user.id,
+    )
+
+    db.add(order)
+    db.flush()
+    db.refresh(order)
+
+    response = client.post(
+        f"/orders/{order.id}/start",
+        headers={
+            "Authorization": f"Bearer {auth_token}",
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["status"] == "IN_TRANSIT"
+
+
+def test_complete_delivery(
+    client,
+    auth_token,
+    db,
+):
+    company = Company(name="x", address="Warsaw")
+
+    db.add(company)
+    db.flush()
+    db.refresh(company)
+
+    user = User(
+        email="test@test.com",
+        hashed_password="hash",
+        role=Role.CLIENT,
+    )
+
+    db.add(user)
+    db.flush()
+    db.refresh(user)
+
+    order = Order(
+        pickup_address="Berlin",
+        delivery_address="Warsaw",
+        cargo_description="Electronics",
+        company_id=company.id,
+        status=OrderStatus.IN_TRANSIT,
+        created_by=user.id,
+    )
+
+    db.add(order)
+    db.flush()
+    db.refresh(order)
+
+    response = client.post(
+        f"/orders/{order.id}/complete",
+        headers={
+            "Authorization": f"Bearer {auth_token}",
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["status"] == "DELIVERED"

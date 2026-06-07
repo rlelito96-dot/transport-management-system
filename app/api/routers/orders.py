@@ -11,6 +11,10 @@ from app.application.use_cases.assign_order import AssignOrderUseCase
 from app.application.use_cases.create_order import (
     CreateOrderUseCase,
 )
+from app.application.use_cases.update_order_status import (
+    UpdateOrderStatusUseCase,
+)
+from app.domain.enums.order_status import OrderStatus
 from app.domain.services.assignment_service import AssignmentService
 from app.infrastructure.repositories.driver_repo import (
     DriverRepository,
@@ -61,3 +65,29 @@ def assign_order(
     )
 
     return use_case.execute(order_id, driver_id, vehicle_id)
+
+
+@router.post("/{order_id}/start")
+def start_delivery(
+    order_id: int,
+    db: Session = Depends(get_db),
+):
+    use_case = UpdateOrderStatusUseCase(OrderRepository(db))
+
+    return use_case.execute(
+        order_id,
+        OrderStatus.IN_TRANSIT,
+    )
+
+
+@router.post("/{order_id}/complete")
+def complete_delivery(
+    order_id: int,
+    db: Session = Depends(get_db),
+):
+    use_case = UpdateOrderStatusUseCase(OrderRepository(db))
+
+    return use_case.execute(
+        order_id,
+        OrderStatus.DELIVERED,
+    )
