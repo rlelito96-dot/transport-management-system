@@ -36,3 +36,6 @@ class Order(Base):
     company = relationship("Company", back_populates="orders")
     driver = relationship("Driver", back_populates="orders")
     vehicle = relationship("Vehicle", back_populates="orders")
+    tracking = relationship(
+        "Tracking", back_populates="orders", cascade="all, delete-orphan"
+    )
