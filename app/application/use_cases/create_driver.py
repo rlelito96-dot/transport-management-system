@@ -1,5 +1,5 @@
 from app.application.dto.driver_dto import DriverDTO
-from app.infrastructure_repositories.driver_repo import DriverRepository
+from app.infrastructure.repositories.driver_repo import DriverRepository
 
 
 class CreateDriverUseCase:

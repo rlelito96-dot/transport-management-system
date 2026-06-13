@@ -1,5 +1,5 @@
 from app.application.dto.vehicle_dto import VehicleDTO
-from app.infrastructure_repositories.vehicle_repo import VehicleRepository
+from app.infrastructure.repositories.vehicle_repo import VehicleRepository
 
 
 class CreateVehicleUseCase:
