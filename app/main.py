@@ -5,6 +5,9 @@ from app.api.routers.drivers import router as driver_router
 from app.api.routers.orders import router as order_router
 from app.api.routers.tracking import router as tracking_router
 from app.api.routers.vehicles import router as vehicle_router
+from app.core.logging import configure_logging
+
+configure_logging()
 
 app = FastAPI(title="TMS Backend")
 
