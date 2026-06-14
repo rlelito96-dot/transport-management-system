@@ -5,6 +5,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import sessionmaker
 
 from app.api.dependencies.db import get_db
+from app.domain.enums.order_status import OrderStatus
+from app.domain.enums.vehicle_status import VehicleStatus
 from app.infrastructure.db.session import engine
 from app.main import app
 
@@ -53,3 +55,32 @@ def auth_token(client):
     token = login_response.json()["access_token"]
 
     return token
+
+
+class DummyOrder:
+    def __init__(self, status=OrderStatus.PENDING):
+        self.status = status
+
+
+class DummyDriver:
+    pass
+
+
+class DummyVehicle:
+    def __init__(self, status=VehicleStatus.ACTIVE):
+        self.status = status
+
+
+@pytest.fixture
+def order():
+    return DummyOrder(status=OrderStatus.PENDING)
+
+
+@pytest.fixture
+def vehicle():
+    return DummyVehicle(status=VehicleStatus.ACTIVE)
+
+
+@pytest.fixture
+def driver():
+    return DummyDriver()
