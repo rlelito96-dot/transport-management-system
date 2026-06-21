@@ -20,20 +20,31 @@ jobs:
           - 5432:5432
 
     env:
-      DATABASE_URL: postgresql://user:password@localhost:5432/test_db
+      DATABASE_URL: postgresql+psycopg://user:password@localhost:5432/test_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
+      SECRET_KEY: supersecret
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      ALGORITHM: HS256
+      DEBUG: False
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
         run: |
-          pip install .[dev]
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run migrations
+        run: alembic upgrade head
 
       - name: Run tests
         run: pytest
