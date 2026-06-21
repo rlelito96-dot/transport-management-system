@@ -12,7 +12,6 @@ cp .env.example .env
 docker compose up -d
 pip install -r requirements.txt
 alembic upgrade head
-uvicorn app.main:app --reload
 ```
 
 ## 📌 Features
@@ -93,11 +92,6 @@ pip install -r requirements.txt
 
 ```bash
 alembic upgrade head
-```
-### 7. Start application
-
-```bash
-uvicorn app.main:app --reload
 ```
 
 ##  📖 API Documentation
