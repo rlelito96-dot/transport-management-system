@@ -60,7 +60,7 @@ Business logic is implemented in use cases, keeping controllers thin and ensurin
 
 ```bash
 git clone https://github.com/your-username/transport-management-system.git
-cd tms
+cd transport-management-system
 ```
 
 ### 2. Create environment file
