@@ -14,6 +14,14 @@ pip install -r requirements.txt
 alembic upgrade head
 ```
 
+## 🌐 Production Deployment
+
+Production environment is deployed on AWS ECS Fargate behind an Application Load Balancer.
+
+The application is automatically deployed through GitHub Actions after changes are merged into `main`.
+
+---
+
 ## 📌 Features
 
 - User authentication (JWT-based)
@@ -25,7 +33,7 @@ alembic upgrade head
 - Order lifecycle management (PENDING → ASSIGNED → IN_TRANSIT → DELIVERED)
 - Unit and integration tests
 - Dockerized development environment
-- CI/CD pipeline with GitHub Actions
+- Automated CI/CD pipeline with GitHub Actions and AWS ECS deployment
 
 ---
 
@@ -38,6 +46,8 @@ alembic upgrade head
 - Pydantic
 - Pytest
 - Docker & Docker Compose
+- AWS (ECS, ECR, RDS, ALB, CloudWatch)
+- GitHub Actions CI/CD
 
 ---
 
@@ -98,6 +108,7 @@ alembic upgrade head
 
 - **API**: http://localhost:8000
 - **Swagger docs**: http://localhost:8000/docs
+- **Redoc**: http://localhost:8000/redoc
 
 ## 🧪 Running Tests
 
@@ -107,7 +118,83 @@ Run tests locally:
 pytest -v
 ```
 
-The project contains both unit and integration tests.
+---
+
+## ☁️ AWS Deployment Architecture
+
+The application is deployed on AWS using containerized infrastructure.
+
+```text
+User
+  |
+  v
+Application Load Balancer (ALB)
+  |
+  v
+ECS Fargate Service
+  |
+  v
+FastAPI Docker Container
+  |
+  v
+RDS PostgreSQL
+```
+
+AWS services used:
+
+- **Amazon ECS Fargate** – runs the backend container
+- **Amazon ECR** – stores Docker images
+- **Application Load Balancer** – routes HTTP traffic to ECS
+- **Amazon RDS PostgreSQL** – managed database
+- **Amazon CloudWatch** – logs and monitoring
+
+---
+
+## 🔄 CI/CD Pipeline
+
+Deployment is automated with GitHub Actions.
+
+```text
+Pipeline flow:
+
+Pull Request
+    |
+    v
+Run tests (pytest)
+
+Merge to main
+    |
+    v
+Build Docker image
+    |
+    v
+Push image to Amazon ECR
+    |
+    v
+Update ECS service
+    |
+    v
+New application deployment
+```
+
+The pipeline automatically deploys changes merged into the `main` branch.
+
+
+## 📊 Monitoring
+
+Implemented monitoring using Amazon CloudWatch:
+
+- ECS container logs available through CloudWatch Logs
+- Application Load Balancer metrics
+- Response time alarm monitoring
+
+Example monitored metric:
+
+- TargetResponseTime > 2 seconds
+
+CloudWatch alarms help detect application performance issues.
+
+---
 
 ## 🔮 Future Improvements
 
