@@ -82,7 +82,11 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          docker build -f docker/api.Dockerfile $REGISTRY/$ECR_REPOSITORY:latest .
+          docker build \
+          -f docker/api.Dockerfile \
+          -t $REGISTRY/$ECR_REPOSITORY:latest \
+          .
+          
           docker push $REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Deploy ECS
