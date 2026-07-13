@@ -7,11 +7,26 @@ Built with a focus on clean architecture, testability, and real-world backend pa
 
 ## 🚀 Quick Start
 
+Linux / macOS / WSL:
 ```bash
+python3 venv venv
+source venv/bin/activate
 cp .env.example .env
 docker compose up -d
 pip install -r requirements.txt
 alembic upgrade head
+pytest -vv
+```
+
+PowerShell:
+```bash
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+cp .env.example .env
+docker compose up -d
+pip install -r requirements.txt
+alembic upgrade head
+pytest -vv
 ```
 
 ## 🌐 Production Deployment
